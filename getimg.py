@@ -39,7 +39,7 @@ def draw_boxes(path, name, rectangle=False):
     a1 = np.array([[point[0][0], 1], [point[1][0], 1]])
     b1 = np.array([point[0][1], point[1][1]])
     g1 = np.linalg.solve(a1, b1)
-    print(g1[0])
+    print(g1)
 
     # 求出与g1线垂直的线,并选择外围的方程g4
     if (g1[0] != 0.0):
@@ -77,26 +77,34 @@ def draw_boxes(path, name, rectangle=False):
     print(g3)
 
 
+
+
+
     # 添加行序列
-
-    tem_row = []
     new_img = []
-    #print(arr_img[212][212], "1111")
-    # for x in range(212, 256):
-    #     y = math.floor(g4[0] * x + g4[1])
-    #     tem_row.append(arr_img[y][x])
-    # new_img = tem_row
-
-    for h in range(10,787):
-        tem_row1 = []
-        for x in range(10, 263):
-            #y = math.floor(g4[0] * x + g4[1])
-            tem_row1.append(arr_img[h][x])
-        new_img.append(tem_row1)
-
+    #h1 = abs(math.floor(g2[1]) - math.floor(g3[1]))
+    h1 = abs(g2[1] - g3[1])
+    alpha=180-math.atan(g1[1])
+    sinalpha=math.sin(alpha)
+    cosalpha=math.cos(alpha)
+    for h in range(0,math.ceil(h1)):
+        print(h)
+        tem_row = []
+        # for x in range(math.floor(point[0][0]), 263):
+        #     y = math.floor(g4[0] * x + g2[1]+h)
+        #     tem_row.append(arr_img[y][x])
+        #     #print(x,"aaa",y)
+        # new_img.append(tem_row)
+        x = math.floor(point[0][0])
+        while(x<math.floor(point[1][0])):
+            y = math.floor(g4[0] * x + g2[1] + h)
+            tem_row.append(arr_img[y][math.floor(x)])
+            x=x+sinalpha
+        new_img.append(tem_row)
     new_img1=np.array(new_img)
     img11 = Image.fromarray(new_img1)
     img11.show()
+    #print(new_img1)
     print(new_img1.shape)
 
     return img
