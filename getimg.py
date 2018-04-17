@@ -49,7 +49,8 @@ def draw_boxes(path, name, rectangle=False):
         if (b22 > b21):
             g4 = [a2, b22]
         else:
-            g4 = [a2, b21]
+            #先作小改动
+            g4 = [a2, b22]
     else:
         if (point[3][1] > point[0][1]):
             g4 = [0, point[3][1]]
@@ -80,71 +81,54 @@ def draw_boxes(path, name, rectangle=False):
 
 
 
-    # 添加行序列
+    #遍历矩形
     new_img = []
-    #h1 = abs(math.floor(g2[1]) - math.floor(g3[1]))
-    h1 = abs(g2[1] - g3[1])
-    alpha=180-math.atan(g1[1])
-    sinalpha=math.sin(alpha)
-    cosalpha=math.cos(alpha)
+    alpha=180-math.atan(g1[0])
+    beta=math.atan(g2[0])
+    sinalpha=abs(math.sin(alpha))
+    cosalpha=abs(math.cos(alpha))
+    #这两个有可能都需要取绝对值
+    cosbeta=abs(math.cos(beta))
 
-    # for x in range(math.floor(point[0][0]-d1), math.floor(point[4][0]-d1)):
-    #     y = math.floor(g4[0] * x + g2[1])
-    d1=0
-    d2=0
-    h0=point[0][1]
-    #x=math.floor(point[0][0])
+    xl = point[0][0]
+    x = xl
+    b = g4[1]
+    #不一定是point[3][0],先用着
+    xr = point[3][0]
     tem_row = []
-    x = point[0][0]
-    print(h0,point[2][1])
-    while (math.ceil(h0) < (point[1][1])):
-        h0=h0+cosalpha
-        x = x + d1
-        while(math.floor(x)<(point[3][0])):
-            y = math.floor(g4[0] * x + g4[1])
-            x = x + 1
-            print(y)
+    #y轴上用高度递减更好？
+    while (b < math.floor(g2[1])):
+        tem_row.clear()
+        while (x < math.ceil(xr)):
+            y = math.floor(g4[0] * x + b)
             tem_row.append(arr_img[y][math.floor(x)])
+            x = x + cosbeta
+
+        b = b + sinalpha
+        xr = xr + cosalpha
+        xl = xl + cosalpha
+        x = xl
         new_img.append(tem_row)
-        d1 = d1 +sinalpha
-        #print(x)
-    # for h in range(0,math.ceil(h1)):
-    #     print(h)
-    #     tem_row = []
-    #     # for x in range(math.floor(point[0][0]), 263):
-    #     #     y = math.floor(g4[0] * x + g2[1]+h)
-    #     #     tem_row.append(arr_img[y][x])
-    #     #     #print(x,"aaa",y)
-    #     # new_img.append(tem_row)
-    #     x = math.floor(point[0][0])
-    #     while(x<math.floor(point[1][0])):
-    #         y = math.floor(g4[0] * x + g2[1] + h)
-    #         tem_row.append(arr_img[y][math.floor(x)])
-    #         x=x+sinalpha
-    #     new_img.append(tem_row)
+
+
     new_img1=np.array(new_img)
     img11 = Image.fromarray(new_img1)
     img11.show()
     #print(new_img1)
-    #print(new_img1.shape)
+    print(new_img1.shape)
 
     return img
 
 
 if __name__ == '__main__':
     path = 'D:\\learn\\projects\\Tianchi\\dataset\\train_1000'  # 文件夹地址
-    name = 'TB1.PhFLXXXXXaDXFXXunYpLFXX'
+    name = 'TB1alRsLXXXXXblaXXXunYpLFXX'
     img = draw_boxes(path, name, True)
     img.resize((400, 400)).save(path + '\\demo.jpg')  # 保存图片
-    # img.show()
     realpath = path + '\\image_1000\\%s.jpg' % name;
     cvtest = cv2.imread(realpath)
     print(cvtest.shape)
-    # cv2.line(cvtest, (300, 0), (100, 399), (0, 0, 233))
-    # cvtest.show()
     box = np.array([[(185, 726), (190, 760), (411, 699), (402, 670)]])
-    # boxaf = np.array([[(0, 0), (35, 0), (35, 65), (0, 65)]])
-    # box = np.array([[(185.1, 726.0), (190.5, 760.2), (411.3, 699.0), (402.3, 670.0)]])
     cv2.fillPoly(cvtest, box, (0, 255, 0), shift=0)
     #cv2.imshow('lena.jpg', cvtest)
     cv2.waitKey(0)
