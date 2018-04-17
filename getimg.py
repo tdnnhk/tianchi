@@ -87,25 +87,46 @@ def draw_boxes(path, name, rectangle=False):
     alpha=180-math.atan(g1[1])
     sinalpha=math.sin(alpha)
     cosalpha=math.cos(alpha)
-    for h in range(0,math.ceil(h1)):
-        print(h)
-        tem_row = []
-        # for x in range(math.floor(point[0][0]), 263):
-        #     y = math.floor(g4[0] * x + g2[1]+h)
-        #     tem_row.append(arr_img[y][x])
-        #     #print(x,"aaa",y)
-        # new_img.append(tem_row)
-        x = math.floor(point[0][0])
-        while(x<math.floor(point[1][0])):
-            y = math.floor(g4[0] * x + g2[1] + h)
+
+    # for x in range(math.floor(point[0][0]-d1), math.floor(point[4][0]-d1)):
+    #     y = math.floor(g4[0] * x + g2[1])
+    d1=0
+    d2=0
+    h0=point[0][1]
+    #x=math.floor(point[0][0])
+    tem_row = []
+    x = point[0][0]
+    print(h0,point[2][1])
+    while (math.ceil(h0) < (point[1][1])):
+        h0=h0+cosalpha
+        x = x + d1
+        while(math.floor(x)<(point[3][0])):
+            y = math.floor(g4[0] * x + g4[1])
+            x = x + 1
+            print(y)
             tem_row.append(arr_img[y][math.floor(x)])
-            x=x+sinalpha
         new_img.append(tem_row)
+        d1 = d1 +sinalpha
+        #print(x)
+    # for h in range(0,math.ceil(h1)):
+    #     print(h)
+    #     tem_row = []
+    #     # for x in range(math.floor(point[0][0]), 263):
+    #     #     y = math.floor(g4[0] * x + g2[1]+h)
+    #     #     tem_row.append(arr_img[y][x])
+    #     #     #print(x,"aaa",y)
+    #     # new_img.append(tem_row)
+    #     x = math.floor(point[0][0])
+    #     while(x<math.floor(point[1][0])):
+    #         y = math.floor(g4[0] * x + g2[1] + h)
+    #         tem_row.append(arr_img[y][math.floor(x)])
+    #         x=x+sinalpha
+    #     new_img.append(tem_row)
     new_img1=np.array(new_img)
     img11 = Image.fromarray(new_img1)
     img11.show()
     #print(new_img1)
-    print(new_img1.shape)
+    #print(new_img1.shape)
 
     return img
 
