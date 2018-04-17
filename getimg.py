@@ -83,10 +83,14 @@ def draw_boxes(path, name, rectangle=False):
 
     #遍历矩形
     new_img = []
-    alpha=180-math.atan(g1[0])
+    #可以先求绝对值
+    alpha=math.atan(g1[0])
+
     beta=math.atan(g2[0])
     sinalpha=abs(math.sin(alpha))
     cosalpha=abs(math.cos(alpha))
+    print(sinalpha)
+    print(cosalpha)
     #这两个有可能都需要取绝对值
     cosbeta=abs(math.cos(beta))
 
@@ -96,14 +100,15 @@ def draw_boxes(path, name, rectangle=False):
     #不一定是point[3][0],先用着
     xr = point[3][0]
     tem_row = []
+    #y = 0
     #y轴上用高度递减更好？
-    while (b < math.floor(g2[1])):
+    while (b < math.ceil(g2[1])):
         tem_row.clear()
         while (x < math.ceil(xr)):
             y = math.floor(g4[0] * x + b)
             tem_row.append(arr_img[y][math.floor(x)])
             x = x + cosbeta
-
+        #print(x)
         b = b + sinalpha
         xr = xr + cosalpha
         xl = xl + cosalpha
@@ -111,6 +116,7 @@ def draw_boxes(path, name, rectangle=False):
         new_img.append(tem_row)
 
 
+    #print(new_img)
     new_img1=np.array(new_img)
     img11 = Image.fromarray(new_img1)
     img11.show()
@@ -122,7 +128,7 @@ def draw_boxes(path, name, rectangle=False):
 
 if __name__ == '__main__':
     path = 'D:\\learn\\projects\\Tianchi\\dataset\\train_1000'  # 文件夹地址
-    name = 'TB1alRsLXXXXXblaXXXunYpLFXX'
+    name = 'TB1.PhFLXXXXXaDXFXXunYpLFXX'
     img = draw_boxes(path, name, True)
     img.resize((400, 400)).save(path + '\\demo.jpg')  # 保存图片
     realpath = path + '\\image_1000\\%s.jpg' % name;
